@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SQLMap Web GUI</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+
+  <div class="custom-container">
+    <h1 class="text-center fw-bold" style="font-family: 'Arial', sans-serif; font-size: 3rem;">SQLMAP</h1>
+    <!-- Navbar dengan tab -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="target-tab" data-bs-toggle="tab" data-bs-target="#target-tab-pane" type="button" role="tab" aria-controls="target-tab-pane" aria-selected="true">Target Settings</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="injection-tab" data-bs-toggle="tab" data-bs-target="#injection-tab-pane" type="button" role="tab" aria-controls="injection-tab-pane" aria-selected="false">Injection Settings</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="table-tab" data-bs-toggle="tab" data-bs-target="#table-tab-pane" type="button" role="tab" aria-controls="table-tab-pane" aria-selected="false">Table Settings</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="enumeration-tab" data-bs-toggle="tab" data-bs-target="#enumeration-tab-pane" type="button" role="tab" aria-controls="enumeration-tab-pane" aria-selected="false">Enumeration</button>
+      </li>
+    </ul>
+
+    <div class="tab-content" id="myTabContent">
+      <!-- Tab target Settings -->
+      <div class="tab-pane fade show active" id="target-tab-pane" role="tabpanel" aria-labelledby="target-tab" tabindex="0">
+        <h2 class="text-center mt-3">Target Settings</h2>
+        <form id="targetForm">
+          <div class="mb-3">
+            <label for="url" class="form-label">URL:</label>
+            <input type="text" class="form-control" id="url" name="url" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="cookies" class="form-label">Cookies:</label>
+            <input type="text" class="form-control" id="cookies" name="cookies">
+          </div>
+
+          <div class="mb-3">
+            <label for="data" class="form-label">Data:</label>
+            <input type="text" class="form-control" id="data" name="data">
+          </div>
+
+          <div class="mb-3">
+            <label for="proxy" class="form-label">Proxy:</label>
+            <input type="text" class="form-control" id="proxy" name="proxy">
+          </div>
+
+          <div class="mb-3">
+            <label for="random-agent" class="form-label">Enable --random-agent:</label>
+            <select class="form-select" id="random-agent" name="random-agent">
+              <option value="off">Disable</option>
+              <option value="on">Enable</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="tor" class="form-label">Enable --tor:</label>
+            <select class="form-select" id="tor" name="tor">
+              <option value="off">Disable</option>
+              <option value="on">Enable</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="check-tor" class="form-label">Enable --check-tor:</label>
+            <select class="form-select" id="check-tor" name="check-tor">
+              <option value="off">Disable</option>
+              <option value="on">Enable</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="batch" class="form-label">Enable --batch:</label>
+            <select class="form-select" id="batch" name="batch">
+              <option value="off">Disable</option>
+              <option value="on" selected>Enable</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <!-- Tab injection Settings -->
+      <div class="tab-pane fade" id="injection-tab-pane" role="tabpanel" aria-labelledby="injection-tab" tabindex="0">
+        <h2 class="text-center mt-3">Injection Settings</h2>
+        <form id="injectionSettingsForm">
+
+          <div class="mb-3">
+            <label for="testparameter" class="form-label">testparameter:</label>
+            <input type="text" class="form-control" id="testparameter" name="testparameter">
+          </div>
+
+          <div class="mb-3">
+            <label for="dbms" class="form-label">dbms:</label>
+            <input type="text" class="form-control" id="dbms" name="dbms">
+          </div>
+
+          <div class="mb-3">
+            <label for="level" class="form-label">Retrieve level (--level):</label>
+            <select class="form-select" id="level" name="level">
+              <option value="off">Disable</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="risk" class="form-label">Retrieve risk (--risk):</label>
+            <select class="form-select" id="risk" name="risk">
+              <option value="off">Disable</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="technique" class="form-label">Retrieve technique (--technique):</label>
+            <select class="form-select" id="technique" name="technique">
+              <option value="off">Disable</option>
+              <option value="BEUSTQ">Default</option>
+              <option value="B">Boolean-based blind</option>
+              <option value="E">Error-based</option>
+              <option value="U">Union query-based</option>
+              <option value="S">Stacked queries</option>
+              <option value="T">Time-based blind</option>
+              <option value="q">Inline query (Out-of-band)</option>
+            </select>
+          </div>
+
+        </form>
+      </div>
+
+      <!-- Tab Enumeration -->
+      <div class="tab-pane fade" id="enumeration-tab-pane" role="tabpanel" aria-labelledby="enumeration-tab" tabindex="0">
+        <h2 class="text-center mt-3">Enumeration</h2>
+        <form id="enumerationForm">
+          <div class="mb-3">
+            <label for="enumeration_option" class="form-label">Enumeration Option: </label>
+            <select class="form-select" id="enumeration_option" name="enumeration_option">
+              <option value="off">Disable</option>
+              <option value="all">Retrieve everything</option>
+              <option value="banner">Retrieve DBMS banner</option>
+              <option value="current-user">Retrieve DBMS current use</option>
+              <option value="current-db">Retrieve DBMS current injection</option>
+              <option value="passwords">Enumerate DBMS users password hashes</option>
+              <option value="dbs">Enumerate DBMS injections</option>
+              <option value="tables">Enumerate DBMS injection tables</option>
+              <option value="columns">Enumerate DBMS injection table columns</option>
+              <option value="schema">Enumerate DBMS schema</option>
+              <option value="dump">Dump DBMS injection table entries</option>
+              <option value="dump-all">Dump all DBMS injections tables entries</option>
+            </select>
+
+          <div class="mb-3">
+            <label for="dbInputSection" class="form-label">Database Input Section:</label>
+            <input type="text" class="form-control" id="dbInputSection" name="dbInputSection">
+          </div>
+
+          <div class="mb-3">
+            <label for="tableInputSection" class="form-label">Table Input Section:</label>
+            <input type="text" class="form-control" id="tableInputSection" name="tableInputSection">
+          </div>
+
+          <div class="mb-3">
+            <label for="columnInputSection" class="form-label">Column Input Section:</label>
+            <input type="text" class="form-control" id="columnInputSection" name="columnInputSection">
+          </div>
+
+        </form>
+      </div>
+    </div>
+
+    <div id="loadingScreen">
+      <div>Loading... Please wait</div>
+    </div>
+
+    <button type="button" class="btn btn-primary" id="generateCommand">Generate Command</button>
+
+    <div id="commandSection" class="hidden mt-4">
+      <h2 class="text-center">Generated Command:</h2>
+      <pre id="generatedCommand"></pre>
+      <button type="button" class="btn btn-success" id="runCommand">Run Command</button>
+    </div>
+
+    <h2 class="text-center mt-4">Output:</h2>
+    <pre id="output"></pre>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+  <!-- Custom JS -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+</html>
